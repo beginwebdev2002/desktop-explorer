@@ -1,0 +1,21 @@
+<main class="main">
+  <h1>Hello, {{ title() }} 0202022022</h1>
+
+  @if (electron.isElectron) {
+    <p>Running inside Electron.</p>
+    <ul>
+      <li>Electron: {{ electron.versions?.electron }}</li>
+      <li>Chrome: {{ electron.versions?.chrome }}</li>
+      <li>Node: {{ electron.versions?.node }}</li>
+    </ul>
+
+    <button type="button" (click)="ping()">Ping main process</button>
+    @if (pingResult(); as result) {
+      <p>Main process replied: <strong>{{ result }}</strong></p>
+    }
+  } @else {
+    <p>Running in a regular browser — Electron API is not available.</p>
+  }
+</main>
+
+<router-outlet />
