@@ -8,7 +8,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     chrome: process.versions.chrome,
     electron: process.versions.electron,
     title: 'Hello World',
-    memory: process.getProcessMemoryInfo(),
   },
   ping: () => ipcRenderer.invoke('ping'),
+
+  // Explorer API — handlers live in main.js.
+  getDrives: () => ipcRenderer.invoke('fs:drives'),
+  getKnownFolders: () => ipcRenderer.invoke('fs:known-folders'),
+  readDir: (dirPath) => ipcRenderer.invoke('fs:read-dir', dirPath),
+  openPath: (filePath) => ipcRenderer.invoke('fs:open', filePath),
+  getMemory: () => ipcRenderer.invoke('system:memory'),
 });

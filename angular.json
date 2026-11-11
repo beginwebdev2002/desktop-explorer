@@ -1,6 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "schematics": {
+    "@schematics/angular:component": {
+      "flat": true
+    }
+  },
   "cli": {
     "packageManager": "npm",
     "analytics": "8e52bbfa-6742-4e01-bb02-3b20bc8d09f0"

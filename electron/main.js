@@ -1,5 +1,7 @@
 const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const os = require('os');
 const path = require('path');
+const fsApi = require('./fs-api');
 
 // `electron . --serve` -> load the Angular dev server (live reload).
 // `electron .`         -> load the built app from dist/.
@@ -44,6 +46,44 @@ ipcMain.handle('ping', (e) => {
   console.log('Ping: ', e)
   return e;
 });
+
+// ---- Explorer API: Angular calls these through window.electronAPI (see preload.js) ----
+
+ipcMain.handle('fs:drives', () => fsApi.listDrives());
+
+ipcMain.handle('fs:read-dir', (_e, dirPath) => fsApi.readDir(requirePath(dirPath)));
+
+ipcMain.handle('fs:known-folders', () => ({
+  home: app.getPath('home'),
+  desktop: app.getPath('desktop'),
+  documents: app.getPath('documents'),
+  downloads: app.getPath('downloads'),
+  pictures: app.getPath('pictures'),
+  music: app.getPath('music'),
+  videos: app.getPath('videos'),
+}));
+
+// Opens a file with its default program (like double-click in Explorer).
+ipcMain.handle('fs:open', async (_e, filePath) => {
+  const error = await shell.openPath(requirePath(filePath));
+  if (error) throw new Error(error);
+});
+
+// All values in bytes.
+ipcMain.handle('system:memory', () => {
+  const total = os.totalmem();
+  const free = os.freemem();
+  // Sum over every Electron process (main, Angular renderer, GPU, ...); workingSetSize is in KB.
+  const appUsed = app.getAppMetrics().reduce((sum, m) => sum + m.memory.workingSetSize, 0) * 1024;
+  return { systemTotal: total, systemFree: free, systemUsed: total - free, appUsed };
+});
+
+function requirePath(value) {
+  if (typeof value !== 'string' || value === '') {
+    throw new Error('Path must be a non-empty string');
+  }
+  return value;
+}
 
 app.whenReady().then(() => {
   createWindow();
