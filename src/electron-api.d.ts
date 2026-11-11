@@ -4,6 +4,7 @@ export interface ElectronAPI {
     node: string;
     chrome: string;
     electron: string;
+    memory: Electron.ProcessMemoryInfo;
   };
   ping(): Promise<string>;
 }

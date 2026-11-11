@@ -16,7 +16,7 @@ function createWindow() {
     icon: path.join(__dirname, '..', 'public', 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: true,
     },
   });
@@ -29,7 +29,7 @@ function createWindow() {
 
   if (isServe) {
     win.loadURL(DEV_SERVER_URL);
-    win.webContents.openDevTools({ mode: 'detach' });
+    win.webContents.openDevTools({ mode: 'right' });
   } else {
     win.loadFile(DIST_INDEX);
   }
@@ -40,7 +40,10 @@ function createWindow() {
 }
 
 // Renderer -> main example: window.electronAPI.ping() resolves to 'pong'.
-ipcMain.handle('ping', () => 'pong');
+ipcMain.handle('ping', (e) => {
+  console.log('Ping: ', e)
+  return e;
+});
 
 app.whenReady().then(() => {
   createWindow();
@@ -52,5 +55,6 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
+  app.quit();
   if (process.platform !== 'darwin') app.quit();
 });

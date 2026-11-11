@@ -10,6 +10,7 @@ export class ElectronService {
   readonly isElectron = !!this.api;
 
   readonly versions = this.api?.versions ?? null;
+  readonly memory = this.api?.versions.memory ?? null;
 
   ping(): Promise<string> {
     if (!this.api) {
