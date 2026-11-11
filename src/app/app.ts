@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ElectronService } from './electron.service';
 
@@ -6,9 +6,9 @@ import { ElectronService } from './electron.service';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrl: './app.scss'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('electron');
   protected readonly electron = inject(ElectronService);
   protected readonly pingResult = signal<string | null>(null);
@@ -19,9 +19,5 @@ export class App implements OnInit {
     } catch (err) {
       this.pingResult.set(`error: ${(err as Error).message}`);
     }
-  }
-
-  ngOnInit(): void {
-    console.log('Electron: ', this.electron);
   }
 }

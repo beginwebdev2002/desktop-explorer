@@ -29,7 +29,7 @@ function createWindow() {
 
   if (isServe) {
     win.loadURL(DEV_SERVER_URL);
-    win.webContents.openDevTools({ mode: 'right' });
+    win.webContents.openDevTools({ mode: 'detach' });
   } else {
     win.loadFile(DIST_INDEX);
   }
@@ -52,6 +52,5 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => {
-  console.log('All windows closed');
   if (process.platform !== 'darwin') app.quit();
 });
