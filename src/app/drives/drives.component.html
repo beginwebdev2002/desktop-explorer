@@ -1,7 +1,24 @@
-<mat-grid-list cols="2" rowHeight="150px">
-  <mat-grid-tile>
-    <button matButton class="drive">
-      <mat-icon fontIcon="hard_drive"></mat-icon>
-    </button>
-  </mat-grid-tile>
+@if (error()) {
+  <p class="error">{{ error() }}</p>
+}
+
+<mat-grid-list cols="3" rowHeight="150px">
+  @for (drive of drives(); track drive.name) {
+    <mat-grid-tile>
+      <button type="button" class="drive" [title]="typeName(drive.type)">
+        <mat-icon [fontIcon]="typeIcon(drive.type)"></mat-icon>
+        <span class="info">
+          <span class="title">{{ title(drive) }}</span>
+          <!-- No sizes for an empty card reader / DVD drive (isReady = false), like Explorer. -->
+          @if (drive.total !== null && drive.free !== null) {
+            <mat-progress-bar
+              [value]="drive.usedPercent ?? 0"
+              [class.almost-full]="(drive.usedPercent ?? 0) >= 90"
+            />
+            <span class="free">{{ formatSize(drive.free) }} свободно из {{ formatSize(drive.total) }}</span>
+          }
+        </span>
+      </button>
+    </mat-grid-tile>
+  }
 </mat-grid-list>

@@ -1,18 +1,76 @@
+@use '@angular/material' as mat;
+
 $drive-icon-size: 48px;
 
 :host {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   height: 100%;
 }
 
+mat-grid-list {
+  width: 100%;
+}
+
 .drive {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 320px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--mat-sys-surface-container-high);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-primary);
+  }
+
   mat-icon {
+    flex-shrink: 0;
     font-size: $drive-icon-size;
     width: $drive-icon-size;
     height: $drive-icon-size;
   }
 }
-mat-grid-list {
-  width: 100%;
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.free {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// Explorer turns the bar red when less than 10% is free.
+.almost-full {
+  @include mat.progress-bar-overrides(
+    (
+      active-indicator-color: var(--mat-sys-error),
+    )
+  );
+}
+
+.error {
+  color: var(--mat-sys-error);
 }
