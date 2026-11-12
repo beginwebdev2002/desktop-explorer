@@ -1,14 +1,53 @@
 // Shape of the API exposed by electron/preload.js via contextBridge.
 // All sizes are in bytes, all dates are timestamps in ms (use with `new Date(x)` or the `date` pipe).
 
+export type DriveType = 'local' | 'removable' | 'network' | 'cd' | 'ram' | 'unknown';
+export type HealthStatus = 'healthy' | 'warning' | 'unhealthy' | 'unknown';
+
 export interface DriveInfo {
   /** 'C:' */
   name: string;
   /** 'C:\\' — pass this to readDir() */
   path: string;
-  total: number;
-  free: number;
-  used: number;
+  /** Volume label, e.g. 'Новый том'. Empty if not set (Explorer then shows "Локальный диск"). */
+  label: string;
+  type: DriveType;
+  /** 'NTFS', 'FAT32', 'exFAT'... null when there is no media */
+  fileSystem: string | null;
+  /** false for an empty card reader / DVD drive — sizes are null then */
+  isReady: boolean;
+  /** Windows is installed on this drive */
+  isSystem: boolean;
+  total: number | null;
+  free: number | null;
+  used: number | null;
+  /** 0–100 with one decimal, e.g. 90.2 */
+  usedPercent: number | null;
+  /** Volume serial number, e.g. '65B22EA0' */
+  serialNumber: string | null;
+  /** Cluster (allocation unit) size in bytes, usually 4096 */
+  clusterSize: number | null;
+  health: HealthStatus;
+  /** For mapped network drives: '\\\\server\\share' */
+  networkPath: string | null;
+  /** Physical disk this drive lives on. Several drives (C:, D:) can share one disk. */
+  disk: PhysicalDiskInfo | null;
+}
+
+export interface PhysicalDiskInfo {
+  /** Disk number as in Disk Management: 0, 1, ... */
+  number: number;
+  /** e.g. 'INTEL SSDPEKNU512GZH' */
+  model: string;
+  mediaType: 'SSD' | 'HDD' | 'SCM' | 'unknown';
+  /** 'NVMe', 'SATA', 'USB', 'SAS', 'RAID', ... */
+  busType: string;
+  partitionStyle: 'GPT' | 'MBR' | 'RAW' | 'unknown';
+  /** Size of the whole physical disk */
+  size: number | null;
+  health: HealthStatus;
+  serialNumber: string | null;
+  firmware: string | null;
 }
 
 export interface FileEntry {

@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const os = require('os');
 const path = require('path');
 const fsApi = require('./fs-api');
+const drives = require('./drives');
 
 // `electron . --serve` -> load the Angular dev server (live reload).
 // `electron .`         -> load the built app from dist/.
@@ -44,12 +45,15 @@ function createWindow() {
 // Renderer -> main example: window.electronAPI.ping() resolves to 'pong'.
 ipcMain.handle('ping', (e) => {
   console.log('Ping: ', e)
-  return e;
+  // Return plain data only: `e` holds live Electron objects (WebContents, frames)
+  // that IPC cannot copy -> "An object could not be cloned".
+  return 'pong';
 });
 
 // ---- Explorer API: Angular calls these through window.electronAPI (see preload.js) ----
 
-ipcMain.handle('fs:drives', () => fsApi.listDrives());
+// Full drive details (label, type, file system, SSD/HDD, model...). Takes ~0.7 s.
+ipcMain.handle('fs:drives', () => drives.getDrives());
 
 ipcMain.handle('fs:read-dir', (_e, dirPath) => fsApi.readDir(requirePath(dirPath)));
 

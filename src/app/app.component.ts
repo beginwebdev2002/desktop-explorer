@@ -5,8 +5,8 @@ import { ElectronService } from './electron.service';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
 })
 export class App implements OnInit {
   protected readonly title = signal('electron');
@@ -25,13 +25,16 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    this.electron.getKnownFolders().then((result) => {
-      console.log('Known Folders: ', result);
-    });
+    // this.electron.getKnownFolders().then((result) => {
+    //   console.log('Known Folders: ', result);
+    // });
 
-    this.electron.readDir('C:\\').then((result) => {
-      const newResult = result.entries.filter((item) => item.isSymlink === false);
-      console.log('Directory Listing: ', newResult);
+    // this.electron.readDir('C:\\').then((result) => {
+    //   const newResult = result.entries.filter((item) => item.isSymlink === false);
+    //   console.log('Directory Listing: ', newResult);
+    // });
+    this.electron.getDrives().then((result) => {
+      console.log('Drives: ', result);
     });
   }
 }
