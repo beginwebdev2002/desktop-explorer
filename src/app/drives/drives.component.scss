@@ -1,0 +1,18 @@
+$drive-icon-size: 48px;
+
+:host {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.drive {
+  mat-icon {
+    font-size: $drive-icon-size;
+    width: $drive-icon-size;
+    height: $drive-icon-size;
+  }
+}
+mat-grid-list {
+  width: 100%;
+}
