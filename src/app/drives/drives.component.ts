@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { MatGridList, MatGridTile } from '@angular/material/grid-list';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-drives',
-  imports: [MatGridList, MatGridTile, MatIconModule],
+  imports: [MatGridList, MatGridTile, MatIcon],
   templateUrl: './drives.component.html',
   styleUrl: './drives.component.scss',
 })
